@@ -5,11 +5,12 @@ import mongoose from "mongoose";
 //
 const app = express();
 app.use(express.json());
+app.use(cors());
 //
 
 //connect database
 mongoose.connect("mongodb://localhost:27017/AsmNodejs", () => {
-  console.log("successfully");
+  console.log("successfully!!!");
 });
 
 app.listen(process.env.PORT, () => {
