@@ -3,10 +3,10 @@ import { create, list, read, remove, update } from "../controllers/categories";
 
 const router = express.Router();
 
-router.get('/category', list);
-router.get('/category/:id', read);
-router.post('/category', create);
-router.patch('/category/:id', update);
-router.delete('/category/:id', remove);
+router.get("/categories", list);
+router.get("/categories/:id", read);
+router.post("/categories", create);
+router.patch("/categories/:id", update);
+router.delete("/categories/:id", remove);
 
 export default router;
