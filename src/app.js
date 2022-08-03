@@ -9,7 +9,7 @@ import routerCategory from "./routers/categories";
 import routerUsers from "./routers/auth";
 import routerAddress from "./routers/address";
 import routerDetailAddress from "./routers/detailAddress";
-
+import routerSeach from "./routers/search";
 //middlewares
 const app = express();
 app.use(cors());
@@ -20,6 +20,7 @@ app.use("/api", routerCategory);
 app.use("/api", routerUsers);
 app.use("/api", routerAddress);
 app.use("/api", routerDetailAddress);
+app.use("/api", routerSeach);
 
 //connect database
 mongoose.connect("mongodb://127.0.0.1:27017/AsmNodejs", () => {
