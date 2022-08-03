@@ -6,7 +6,7 @@ export const listSearch = async (req, res, next) => {
     const searchData = req.query.search;
     // console.log(searchData);
     if (searchData !== "") objWhere.name = new RegExp(searchData, "i");
-    console.log(objWhere.name);
+    console.log(objWhere.price);
     const data = await Products.find(objWhere);
     // console.log(data);
     res.json(data);
