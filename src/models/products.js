@@ -22,6 +22,9 @@ const productSchema = mongoose.Schema({
   feature: {
     type: String,
   },
+  ishidden: {
+    type: Boolean,
+  },
   categoryId: {
     type: ObjectId,
     ref: "category",
