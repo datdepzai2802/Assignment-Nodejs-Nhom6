@@ -6,10 +6,11 @@ import mongoose from "mongoose";
 //router
 import routerProducts from "./routers/products";
 import routerCategory from "./routers/categories";
-import routerUsers from "./routers/auth";
+import routerAuth from "./routers/auth";
 import routerAddress from "./routers/address";
 import routerDetailAddress from "./routers/detailAddress";
 import routerSeach from "./routers/search";
+import routerUsers from "./routers/users";
 //middlewares
 const app = express();
 app.use(cors());
@@ -17,10 +18,11 @@ app.use(express.json());
 
 app.use("/api", routerProducts);
 app.use("/api", routerCategory);
-app.use("/api", routerUsers);
+app.use("/api", routerAuth);
 app.use("/api", routerAddress);
 app.use("/api", routerDetailAddress);
 app.use("/api", routerSeach);
+app.use("/api", routerUsers);
 
 //connect database
 mongoose.connect("mongodb://127.0.0.1:27017/AsmNodejs", () => {
