@@ -1,5 +1,6 @@
 import Users from "../models/users";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 export const signup = async (req, res) => {
   try {
@@ -9,15 +10,17 @@ export const signup = async (req, res) => {
         message: "Email đã tồn tại, vui lòng nhập email khác",
       });
     }
-    const users = await Users(req.body).save();
-    if (users) {
-      return res.status(200).json({
-        users: {
-          email: users.email,
-          name: users.name,
-        },
-      });
-    }
+    const salt = await bcrypt.genSalt(10);
+    const hashed = await bcrypt.hash(req.body.password, salt);
+
+    const newUser = new Users({
+      name: req.body.name,
+      email: req.body.email,
+      password: hashed,
+    });
+    // console.log(newUser);
+    const user = await newUser.save();
+    if (user) res.status(200).json(user);
   } catch (error) {
     return res.status(400).json({
       message: "Đăng kí không thành công",
@@ -28,41 +31,40 @@ export const signup = async (req, res) => {
 
 export const signin = async (req, res) => {
   try {
-    const users = await Users.findOne({ email: req.body.email }).exec();
-    if (!users) {
+    const user = await Users.findOne({ email: req.body.email }).exec();
+    if (!user) {
       return res.status(400).json({
         message: "Email không tồn tại",
       });
     }
-    if (!users.authenticate(req.body.password)) {
+
+    const validPassword = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
+    if (!validPassword) {
       return res.status(400).json({
         message: "Sai mật khẩu",
       });
     }
 
-    const token = jwt.sign({ id: users._id }, "123456", { expiresIn: 60 * 60 });
-    return res.status(200).json({
-      token,
-      users: {
-        id: users._id,
-        email: users.email,
-      },
-    });
+    if (user && validPassword) {
+      const token = jwt.sign(
+        {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          admin: user.admin,
+        },
+        process.env.JWT_KEY,
+        { expiresIn: "1d" }
+      );
+      user.password = undefined;
+      return res.status(200).json({ user, token });
+    }
   } catch (error) {
     return res.status(400).json({
-      message: "Đăng nhập không thành công",
-      error,
-    });
-  }
-};
-
-export const UsersGetAll = async (req, res) => {
-  try {
-    const users = await Users.find();
-    res.json(users);
-  } catch (error) {
-    return res.status(400).json({
-      error: "Không có users",
+      error: "Đăng nhập không thành công",
     });
   }
 };
