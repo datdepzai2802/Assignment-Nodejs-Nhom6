@@ -18,6 +18,6 @@ export const veryfiToken = (req, res, next) => {
 
 export const checkAdmin = (req, res, next) => {
   veryfiToken(req, res, () => {
-    console.log(req.user);
+    // console.log(req.user);
   });
 };
