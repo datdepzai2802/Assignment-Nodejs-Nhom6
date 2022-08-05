@@ -7,10 +7,8 @@ const router = express.Router();
 
 router.get("/products", list);
 router.get("/products/:id", read);
-router.post("/products/:userId", create);
+router.post("/products/", create);
 router.patch("/products/:id", update);
 router.delete("/products/:id", remove);
-
-router.param("userId", userById);
 
 export default router;
